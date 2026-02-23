@@ -1,12 +1,1 @@
-[mysql]
-mysql.kalyankalavena.in
-
-[backend]
-backend.kalyankalavena.in
-
-[frontend]
-frontend.kalyankalavena.in
-
-[all:vars] 
-ansible_user=ec2-user 
-ansible_password=DevOps321
+ansible-playbook -i inventory.ini mysql.yaml
