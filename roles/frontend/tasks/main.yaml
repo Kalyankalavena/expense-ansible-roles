@@ -1,6 +1,8 @@
 - name: configure frontend server
   hosts: frontend
   become: yes
+  roles:
+    - frontend
   tasks:   
   - name: install nginx server
     ansible.builtin.dnf:
