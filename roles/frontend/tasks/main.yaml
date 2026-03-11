@@ -1,51 +1,45 @@
-- name: configure frontend server
-  hosts: frontend
-  become: yes
-  roles:
-    - frontend
-  tasks:   
-  - name: install nginx server
-    ansible.builtin.dnf:
-      name: nginx
-      state: installed
+- name: install nginx server
+  ansible.builtin.dnf:
+    name: nginx
+    state: installed
 
-  - name: start and enable nginx service
-    ansible.builtin.service:
-     name: nginx
-     state: started
-     enabled: yes
+- name: start and enable nginx service
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
 
-  - name: include common role
-    include role:
-      name: common
-      tasks_from: main
+- name: include common role
+  include role:
+    name: common
+    tasks_from: main
 
-  - name: delete html directory
-    ansible.builtin.file:
-     path: /usr/share/nginx/html
-     state: absent
+- name: delete html directory
+  ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: absent
 
-  - name: create html directory  
-    ansible.builtin.file:
-     path: /usr/share/nginx/html
-     state: directory
+- name: create html directory  
+  ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: directory
 
-  - name: download frontend code
-    ansible.builtin.get_url:
-     url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
-     dest: /tmp/frontend.zip
+- name: download frontend code
+  ansible.builtin.get_url:
+    url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+    dest: /tmp/frontend.zip
 
-  - name: unzip the frontend code
-    ansible.builtin.unarchive:  
-     src: /tmp/frontend.zip
-     dest: /usr/share/nginx/html
-     remote_src: yes
-    
-  - name: copy expense configuration
-    ansible.builtin.templates:
-     src: expense.conf.j2
-     dest: /etc/nginx/default.d/expense.conf
-    notify:
-    - Restart Nginx
+- name: unzip the frontend code
+  ansible.builtin.unarchive:  
+    src: /tmp/frontend.zip
+    dest: /usr/share/nginx/html
+    remote_src: yes
+  
+- name: copy expense configuration
+  ansible.builtin.templates:
+    src: expense.conf.j2
+    dest: /etc/nginx/default.d/expense.conf
+  notify:
+  - Restart Nginx
 
-   
+  
